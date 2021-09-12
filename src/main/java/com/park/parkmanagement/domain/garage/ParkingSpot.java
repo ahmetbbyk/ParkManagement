@@ -10,9 +10,9 @@ public class ParkingSpot {
 		return vehicle == null;
 	}
 
-	public boolean park(int spotNumber, Vehicle vhcl) {
+	public boolean park(int spotNumber, Vehicle v) {
 		this.spotNumber = spotNumber;
-		vehicle = vhcl;
+		vehicle = v;
 		vehicle.parkInSpot(this);
 		return true;
 	}
