@@ -1,38 +1,69 @@
 package com.park.parkmanagement.domain.vehicle;
 
-public abstract class Vehicle {
-    private String vehiclePlateNo;
-    private String vehicleColour;
-    private final VehicleWidth widht;
-    private final VehicleType type;
+import java.util.ArrayList;
+import java.util.StringJoiner;
 
-    
-    public Vehicle(VehicleType type, VehicleWidth width) {
-        this.type = type;
-        this.widht = width;
-    }
-    
-	public String getVehiclePlateNo() {
-        return vehiclePlateNo;
-    }
+import com.park.parkmanagement.constant.SlotCount;
+import com.park.parkmanagement.constant.VehicleType;
+import com.park.parkmanagement.domain.garage.ParkingSpot;
+public  class Vehicle {
 
-    public void setVehiclePlateNo(String vehiclePlateNo) {
-        this.vehiclePlateNo = vehiclePlateNo;
+    protected ArrayList<ParkingSpot> parkingSpots = new ArrayList<>();
+    public String vehiclePlate;
+    public String vehicleColour;
+    public int spotsNeeded;
+    public VehicleType vehicleType;
+
+    public VehicleType getVehicleType() {
+        return vehicleType;
     }
 
-    public String getVehicleColour() {
-        return vehicleColour;
+    public int getSpotsNeeded() {
+        return spotsNeeded;
     }
 
-    public void setVehicleColour(String vehicleColour) {
-        this.vehicleColour = vehicleColour;
+    public void parkInSpot(ParkingSpot s) {
+        parkingSpots.add(s);
     }
 
-	public VehicleType getType() {
-		return type;
-	}
+    public void clearSpots() {
+        for (ParkingSpot parkingSpot : parkingSpots) {
+            parkingSpot.removeVehicle();
+        }
+        parkingSpots.clear();
+    }
 
-	public VehicleWidth getWidht() {
-		return widht;
-	}
+    public boolean canFitInSpot(int spotNumber, ParkingSpot[] spots) {
+        for (var i = 0; i < spotsNeeded; i++) {
+            if ((spotNumber + i)<SlotCount.SLOT_COUNT.getValue() && ((spotNumber + i) > spots.length || (!spots[spotNumber + i].isAvailable()))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+	public boolean isExist(ParkingSpot[] spots) {
+    	 for (var i = 0; i < spots.length; i++) {
+            if (spots[i].getVehicle() !=null && this.vehiclePlate.equals(spots[i].getVehicle().getVehiclePlate())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public String getVehiclePlate() {
+        return vehiclePlate;
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", Vehicle.class.getSimpleName() + "[", "]")
+                .add("vehiclePlate='" + vehiclePlate + "'")
+                .add("spotsNeeded=" + spotsNeeded)
+                .add("vehicleType=" + vehicleType)
+                .toString();
+    }
+
 }

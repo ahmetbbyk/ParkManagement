@@ -3,16 +3,15 @@ package com.park.parkmanagement.service;
 import com.park.parkmanagement.domain.vehicle.Vehicle;
 import com.park.parkmanagement.exception.ParkingException;
 
-import java.util.List;
-import java.util.Optional;
+public interface ParkService {
 
-public interface ParkService extends AbstractService {
+    /* ---- Parking Actions ----- */
 
-    /* ---- Actions ----- */
+    public String park(Vehicle vehicle) throws ParkingException;
+    
+    public void leaveVehicle(Vehicle vehicle) throws ParkingException;
 
-    public Optional<Integer> park(Vehicle vehicle) throws ParkingException;
+    public String status() throws ParkingException;
 
-    public void leave(int slotNumber) throws ParkingException;
-
-    List<Vehicle> getAllParkingList() throws ParkingException;
+	public void leave(int id) throws ParkingException;
 }

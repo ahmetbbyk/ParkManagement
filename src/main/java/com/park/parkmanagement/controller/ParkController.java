@@ -2,35 +2,35 @@ package com.park.parkmanagement.controller;
 
 import com.park.parkmanagement.domain.vehicle.Vehicle;
 import com.park.parkmanagement.exception.ParkingException;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.park.parkmanagement.service.ParkService;
-
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/parkManagement")
 public class ParkController {
 
-    private final ParkService parkService;
+	@Autowired
+	ParkService parkService;
 
-    public ParkController(ParkService parkService) {
-        this.parkService = parkService;
+    @RequestMapping(value = "/park", method = RequestMethod.POST)
+    public String park(@RequestBody Vehicle vehicle) throws ParkingException {
+    	return parkService.park(vehicle);
     }
 
-    @RequestMapping(value = "/park", method = RequestMethod.POST, headers = "Accept=application/json")
-    public Optional<Integer> parkVehicle(@RequestBody Vehicle vehicle) throws ParkingException {
-        return parkService.park(vehicle);
+    @RequestMapping(value = "/leaveVehicle" ,method = RequestMethod.DELETE)
+    public void leaveVehicle(@RequestBody Vehicle vehicle) throws ParkingException {
+    	parkService.leaveVehicle(vehicle);
     }
-
-    @RequestMapping(value = "/leave/{id}" ,method = RequestMethod.DELETE,headers = "Accept=application/json")
-    public void leaveVehicle(@PathVariable("id") int id) throws ParkingException {
-        parkService.leave(id);
+  
+	@RequestMapping(value = "/leave" ,method = RequestMethod.DELETE)
+    public void leave(@RequestBody int leaveCarId) throws ParkingException {
+		parkService.leave(leaveCarId);
     }
-
-    @RequestMapping(value = "/status", method = RequestMethod.GET, headers = "Accept=application/json")
-    public List<Vehicle> getAllParkingList() throws ParkingException {
-        List<Vehicle> vehicleList = parkService.getAllParkingList();
-        return vehicleList;
+    
+    @RequestMapping(value = "/status", method = RequestMethod.GET)
+    public String status() throws ParkingException {
+    	return parkService.status();
     }
 }

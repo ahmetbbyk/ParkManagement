@@ -1,4 +1,4 @@
-package com.park.parkmanagement.domain.vehicle;
+package com.park.parkmanagement.constant;
 
 public enum VehicleWidth {
 	
